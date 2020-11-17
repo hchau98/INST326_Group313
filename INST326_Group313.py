@@ -39,8 +39,8 @@ class Calendar:
       Returns to the user a list of conflicting scheduling appointments
       
       Args:
-        new_appointment(dict): 
-        existing_appointment(dict):
+        new_appointment(dict): dict of new appointment
+        existing_appointment(dict): dict of all appointments
       """
 
 
