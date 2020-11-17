@@ -51,14 +51,6 @@ class Calendar:
           	event: the event to be added
       """
 
-<<<<<<< HEAD
-=======
-    Attributes: 
-        month (str): the month
-        day (int): the day of the moth
-        year (int): the year
-        weekday (str): the day of the week
->>>>>>> 053f8d54874320444aa4559e55ba49270cbf1d2c
 
     def remove_event(event):
       """ Removes an event from the users schedule
@@ -102,15 +94,6 @@ class Event:
           event_start: A tuple to designate the start time
           even_end:A tuple to designate the end time
       """
-
-<<<<<<< HEAD
-=======
-    def __init__(self):
-        """
-
-        """
->>>>>>> 053f8d54874320444aa4559e55ba49270cbf1d2c
-
 
 import calendar from Calendar
 import event from Event
