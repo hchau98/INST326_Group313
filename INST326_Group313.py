@@ -7,11 +7,15 @@ class Calendar:
         month (str): the month
         day (int): the day of the moth
         year (int): the year
+        weekday (str): the day of the week
 
     """
 
 
     def __init__(self):
+        """
+
+        """
 
     def get_schedule(): 
 
@@ -21,4 +25,11 @@ class Calendar:
 
         
 
+import calendar from Calendar
+import argparse
+import sys
+
+def main():
+
+if __name__ == "__main__":
     
