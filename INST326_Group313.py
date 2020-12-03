@@ -1,4 +1,5 @@
-Class Calendar:
+import pandas
+ Calendar:
   """ This is a calendar to keep people organized """
 
 class Calendar:
@@ -14,13 +15,28 @@ class Calendar:
           remove_event: Removes an event from your calendar
           edit_event: Edits an event in your calendar
     """
-    def __init__(self):
-      """ Initializes an instance of calendar by parsing a csv file and creating a list of lists that contain events
+    def __init__(self,filename):
+      """ Creates a datafram of the schedule using pandas. In addition values for dates and events are assigned as well
           
           Args:
               Self
+              Filename: String containing path to CSV schedule file
                """
-
+      fh = pandas.read_csv(filename,sep= ",")
+      temp = fh['DATE']
+      date_ids=[]
+      for i in temp:
+        j = datetoid(i)
+        date_ids.append(j)
+      fh["Date IDs"] = date_ids
+      event_ids=[]
+      counter = 1
+      for i in temp:
+        event_ids.append(j)
+        j= j+ 1
+      fh["Event IDs"] = event_ids
+          
+          
     def get_schedule(self,day):
       """ Gives the user a list of events for what is scheduled for them
           Args:
@@ -44,7 +60,7 @@ class Calendar:
       """
 
 
-    def add_event(event):
+    def add_event(event_id):
       """ Adds an event to the users schedule
       		
           Args:
@@ -83,6 +99,7 @@ class Event:
       Methods:
           __init__: Creates an instance of the event class with given parameters
     """
+    
 
     def __init__(self, event_id, date_id, event_desc, event_start, event_end):
       """Initializes the create of the event object with the given parameters
@@ -94,6 +111,11 @@ class Event:
           event_start: A tuple to designate the start time
           even_end:A tuple to designate the end time
       """
+      self.event_id = event_id
+      self.date_id = date_id
+      self.event_desc = event_desc
+      self.event_start = event_start
+      self.event_end = event_end
 
 import calendar from Calendar
 import event from Event
@@ -105,7 +127,28 @@ def main():
 if __name__ == "__main__"-
         
     
-    
+def datetoid(date):
+  """Takes a date as a string and conerts it into a date id
+        
+        Args:
+          date: A string reprentation of a date
+          
+        Returns:
+          temp: An integer with date id
+  """
+
+  temp = date.split('/')
+  date=''
+  for i in temp:
+          b = i.split('/')
+          if len(b[1]) == 1:
+              b[1] = "0" + b[1]
+          if len(b[0]) == 1:
+              b[0] = "0" + b[0]
+          temp = b[2]+b[1]+b[0]
+  return int(temp)
+
+def idtodate(id):   
     
 
         
