@@ -1,6 +1,8 @@
 import pandas
- Calendar:
-  """ This is a calendar to keep people organized """
+import argparse
+import sys
+
+""" This is a calendar to keep people organized """
 
 class Calendar:
     """ This class represents a users schedule on a calendar
@@ -22,19 +24,21 @@ class Calendar:
               Self
               Filename: String containing path to CSV schedule file
                """
-      fh = pandas.read_csv(filename,sep= ",")
-      temp = fh['DATE']
+      self.filename = filename
+      self.fh = pandas.read_csv(filename,sep= ",")
+      temp = self.fh['DATE']
       date_ids=[]
+      #Datemethod
       for i in temp:
         j = datetoid(i)
         date_ids.append(j)
-      fh["Date IDs"] = date_ids
+      self.fh["Date IDs"] = date_ids
       event_ids=[]
       counter = 1
       for i in temp:
-        event_ids.append(j)
-        j= j+ 1
-      fh["Event IDs"] = event_ids
+        event_ids.append(counter)
+        counter = counter + 1
+      self.fh["Event IDs"] = event_ids
           
           
     def get_schedule(self,day):
@@ -76,7 +80,7 @@ class Calendar:
       """
 
 
-    def edit_event(event_id,  date_id, event_desc, event_start, event_end)
+    def edit_event(event_id,  date_id, event_desc, event_start, event_end):
     	""" Edits the parameters of an event 
 
             Args:
@@ -117,16 +121,9 @@ class Event:
       self.event_start = event_start
       self.event_end = event_end
 
-import calendar from Calendar
-import event from Event
-import argparse
-import sys
 
-def main():
 
-if __name__ == "__main__"-
-        
-    
+
 def datetoid(date):
   """Takes a date as a string and conerts it into a date id
         
@@ -134,30 +131,17 @@ def datetoid(date):
           date: A string reprentation of a date
           
         Returns:
-          temp: An integer with date id
+          date_id: An integer with date id
   """
 
-  temp = date.split('/')
-  date=''
+  temp = date.split("/")
+  date_id=''
   for i in temp:
-          b = i.split('/')
-          if len(b[1]) == 1:
-              b[1] = "0" + b[1]
-          if len(b[0]) == 1:
-              b[0] = "0" + b[0]
-          temp = b[2]+b[1]+b[0]
-  return int(temp)
-
-def idtodate(id):   
-    
-
-        
-
-import calendar from Calendar
-import argparse
-import sys
-
-def main():
-
-if __name__ == "__main__":
-    
+          if len(temp[1]) == 1:
+              temp[1] = "0" + temp[1]
+          if len(temp[0]) == 1:
+              temp[0] = "0" + temp[0]
+          date_id = temp[2]+temp[1]+temp[0]
+  return date_id
+def idtodate(id):  
+  """id to date function"""
