@@ -51,7 +51,14 @@ class Calendar:
           Return:
               sched: This would be a list of events that the user has scheduled from their calendar
       """
-
+      self.day = day 
+      date_id = datetoid(self.day)
+      sched = []
+      temp = self.fh 
+      for index, row in temp.iterrows():
+        if row['Date IDs'] == date_id:
+          sched.append(row)
+      return (sched)
 
 
     def conflicts(new_appointment,existing_appointments):
