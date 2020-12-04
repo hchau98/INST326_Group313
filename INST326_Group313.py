@@ -61,7 +61,7 @@ class Calendar:
       return (sched)
 
 
-    def conflicts(new_appointment,existing_appointments):
+    def conflicts(self, new_appointment,existing_appointments):
       """
       Returns to the user a list of conflicting scheduling appointments
       
@@ -79,12 +79,12 @@ class Calendar:
       """
       entry = {'DATE' : date, 'EVENT DESCRIPTION': event, 'START TIME': start, 'END TIME': end}
       self.fh.append(entry, ignore_index=True)
-      
 
 
 
 
-    def remove_event(event):
+
+    def remove_event(self, event):
       """ Removes an event from the users schedule
       		
           Args:
@@ -92,7 +92,7 @@ class Calendar:
       """
 
 
-    def edit_event(event_id,  date_id, event_desc, event_start, event_end):
+    def edit_event(self, event_id,  date_id, event_desc, event_start, event_end):
     	""" Edits the parameters of an event 
 
             Args:
