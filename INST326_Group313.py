@@ -71,12 +71,17 @@ class Calendar:
       """
 
 
-    def add_event(event_id):
+    def add_event(self, date, start, end, event):
       """ Adds an event to the users schedule
       		
           Args:
           	event: the event to be added
       """
+      entry = {'DATE' : date, 'EVENT DESCRIPTION': event, 'START TIME': start, 'END TIME': end}
+      self.fh.append(entry, ignore_index=True)
+      
+
+
 
 
     def remove_event(event):
