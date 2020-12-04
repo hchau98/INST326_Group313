@@ -75,7 +75,11 @@ class Calendar:
       """ Adds an event to the users schedule
       		
           Args:
+            date(int): the date of the event(mm/dd/yyyy)
+            start(int): start time of the event
+            end(int): end time of the event
           	event: the event to be added
+
       """
       entry = {'DATE' : date, 'EVENT DESCRIPTION': event, 'START TIME': start, 'END TIME': end}
       self.fh.append(entry, ignore_index=True)
