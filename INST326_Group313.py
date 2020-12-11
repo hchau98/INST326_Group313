@@ -1,6 +1,7 @@
 import pandas
 import argparse
 import sys
+import re
 
 """ This is a calendar to keep people organized """
 
@@ -53,15 +54,15 @@ class Calendar:
       """
       self.day = day 
       date_id = datetoid(self.day)
-      sched = []
+      scheds = []
       temp = self.fh 
       for index, row in temp.iterrows():
         if row['Date IDs'] == date_id:
-          sched.append(row)
-      return (sched)
+          scheds.append(row)
+      return (scheds)
 
 
-    def conflicts(self, new_appointment,existing_appointments):
+    def conflicts():
       """
       Returns to the user a list of conflicting scheduling appointments
       
@@ -69,26 +70,19 @@ class Calendar:
         new_appointment(dict): dict of new appointment
         existing_appointment(dict): dict of all appointments
       """
+      
 
 
-    def add_event(self, date, start, end, event):
+    def add_event(event_id):
       """ Adds an event to the users schedule
       		
           Args:
-            date(int): the date of the event(mm/dd/yyyy)
-            start(int): start time of the event
-            end(int): end time of the event
           	event: the event to be added
-
       """
-      entry = {'DATE' : date, 'EVENT DESCRIPTION': event, 'START TIME': start, 'END TIME': end}
-      self.fh.append(entry, ignore_index=True)
+      
 
 
-
-
-
-    def remove_event(self, event):
+    def remove_event(event):
       """ Removes an event from the users schedule
       		
           Args:
@@ -96,7 +90,7 @@ class Calendar:
       """
 
 
-    def edit_event(self, event_id,  date_id, event_desc, event_start, event_end):
+    def edit_event(event_id,  date_id, event_desc, event_start, event_end):
     	""" Edits the parameters of an event 
 
             Args:
@@ -136,7 +130,11 @@ class Event:
       self.event_desc = event_desc
       self.event_start = event_start
       self.event_end = event_end
-
+    def create_event(self):
+      date = idtodate(self.date_id)
+      data = {'Date': [date],'Event Description':[self.event_desc],'Start Time':[self.event_start],'End Time':[self.event_end],'Date IDs':[self.date_id],'Event IDs':[self.event_id]}
+      event = pd.Dataframe(data, columns =['Date','Event Description','Start Time','End Time','Data IDs','Event IDs'])
+      return(event)
 
 
 
@@ -159,5 +157,22 @@ def datetoid(date):
               temp[0] = "0" + temp[0]
           date_id = temp[2]+temp[1]+temp[0]
   return date_id
-def idtodate(id):  
+def idtodate(date_id):  
   """id to date function"""
+  pattern = r'(\d\d\d\d)(\d\d)(\d\d)'
+  match = re.search(pattern,date_id)
+  year = match[1]
+  date = match[3]
+  month = match[2]
+  date = str(month + "/" + date + "/" + year)
+  return date
+  
+  
+def parse_args(arglist):
+  parser = argparse.ArgumentParser()
+  parser.add_argument("filename",help="csv file containing schedule")
+  return parser.parse_args(arglist)
+
+if __name__ == "__main__":
+  args = parse_args(sys.argv[1:])
+ 
