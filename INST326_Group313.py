@@ -62,7 +62,7 @@ class Calendar:
       return (scheds)
 
 
-    def conflicts():
+    def conflicts(self):
       """
       Returns to the user a list of conflicting scheduling appointments
       
@@ -70,19 +70,33 @@ class Calendar:
         new_appointment(dict): dict of new appointment
         existing_appointment(dict): dict of all appointments
       """
+
+      
+      
       
 
 
-    def add_event(event_id):
+    def add_event(self, event_date, start_time, end_time, event):
       """ Adds an event to the users schedule
       		
           Args:
-          	event: the event to be added
+              event_date: the day of the event to be added
+              start_time: the time event starts
+              end_time: the time the event ends
+              event(str): description of the event to be added 
       """
-      
 
+      self.event_date = datetoid(event_date)
+      self.start_time = start_time
+      self.end_time = end_time
+      self.event = event
 
-    def remove_event(event):
+      new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
+
+      self.fh = self.fh.append(new_event, ignore_index=True)
+      return self.fh
+
+    def remove_event(self):
       """ Removes an event from the users schedule
       		
           Args:
@@ -98,7 +112,7 @@ class Calendar:
             	event_desc: A string that gives a description of the event
             	event_start: A tuple to designate the start time
            		even_end:A tuple to designate the end tim
-		"""
+		  """
     
 class Event:
     """ This class represents an event on the calendar
@@ -139,10 +153,10 @@ class Event:
 
 
 def datetoid(date):
-  """Takes a date as a string and conerts it into a date id
+  """Takes a date as a string and converts it into a date id
         
         Args:
-          date: A string reprentation of a date
+          date: A string representation of a date
           
         Returns:
           date_id: An integer with date id
@@ -157,6 +171,7 @@ def datetoid(date):
               temp[0] = "0" + temp[0]
           date_id = temp[2]+temp[1]+temp[0]
   return date_id
+
 def idtodate(date_id):  
   """id to date function"""
   pattern = r'(\d\d\d\d)(\d\d)(\d\d)'
