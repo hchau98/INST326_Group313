@@ -86,14 +86,11 @@ class Calendar:
               event(str): description of the event to be added 
       """
 
-      self.event_date = datetoid(event_date)
-      self.start_time = start_time
-      self.end_time = end_time
-      self.event = event
 
-      new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
+      #new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
 
-      self.fh = self.fh.append(new_event, ignore_index=True)
+      #self.fh = self.fh.append([event_date, datetoid(event_date), event, start_time, end_time])
+      self.fh.loc[len(self.fh.index)] = [event_date, event, start_time, end_time, datetoid(event_date), len(self.fh.index)+1]
       return self.fh
 
     def remove_event(self):
@@ -114,44 +111,6 @@ class Calendar:
            		even_end:A tuple to designate the end tim
 		  """
     
-class Event:
-    """ This class represents an event on the calendar
-
-      Attributes: 
-          event_id: an assigned integer to refernce the event
-          date_id: An assigned integer to reference the event to a date on the calendar
-          event_desc: A string that gives a description of the event
-          event_start: A tuple to designate the start time
-          even_end:A tuple to designate the end time
-
-      Methods:
-          __init__: Creates an instance of the event class with given parameters
-    """
-    
-
-    def __init__(self, event_id, date_id, event_desc, event_start, event_end):
-      """Initializes the create of the event object with the given parameters
-      
-      		Args:
-          	event_id: an assigned integer to refernce the event
-          date_id: An assigned integer to reference the event to a date on the calendar
-          event_desc: A string that gives a description of the event
-          event_start: A tuple to designate the start time
-          even_end:A tuple to designate the end time
-      """
-      self.event_id = event_id
-      self.date_id = date_id
-      self.event_desc = event_desc
-      self.event_start = event_start
-      self.event_end = event_end
-    def create_event(self):
-      date = idtodate(self.date_id)
-      data = {'Date': [date],'Event Description':[self.event_desc],'Start Time':[self.event_start],'End Time':[self.event_end],'Date IDs':[self.date_id],'Event IDs':[self.event_id]}
-      event = pd.Dataframe(data, columns =['Date','Event Description','Start Time','End Time','Data IDs','Event IDs'])
-      return(event)
-
-
-
 def datetoid(date):
   """Takes a date as a string and converts it into a date id
         
@@ -181,7 +140,10 @@ def idtodate(date_id):
   month = match[2]
   date = str(month + "/" + date + "/" + year)
   return date
-  
+
+def validatedate(date_id):
+  """Takes a date id
+  """
   
 def parse_args(arglist):
   parser = argparse.ArgumentParser()
