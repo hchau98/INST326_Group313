@@ -1,6 +1,5 @@
 import pandas
 import numpy as np
-
 import argparse
 import sys
 import re
@@ -66,12 +65,15 @@ class Calendar:
 
     def conflicts(self, date, start, end):
       """
-      Returns to the user a list of conflicting scheduling appointments
+      Returns True if a new event conflicts with an existing appointment
       
       Args:
         date: date of event
         start: start time of event
         end: end time of event
+      
+      Returns: 
+        boolean values
       
       """
 
@@ -105,7 +107,7 @@ class Calendar:
               event: description of the event to be added 
       """
 
-      self.event_date = datetoid(event_date)
+      self.event_date = event_date
       self.start_time = start_time
       self.end_time = end_time
       self.event = event
@@ -113,7 +115,8 @@ class Calendar:
       new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
       conflict = conflicts(event_date, start_time, end_time)
 
-      if conflict == False
+      if conflict == False:
+        
         self.fh = self.fh.append(new_event, ignore_index=True)
         return new_event
       else:
