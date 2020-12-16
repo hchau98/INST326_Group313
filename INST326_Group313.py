@@ -14,7 +14,7 @@ class Calendar:
       Methods:
       		__init__: Initilizes the calander object by parsing a csv
           get_schedule(): Gives the user their schedule for the day
-          conflicts: returns a list containing conflicting scheduling appointments
+          conflicts: Returns a boolean value depending on whether a new appointment conflicts with an existing one
           add_event: Adds an event to your calendar
           remove_event: Removes an event from your calendar
           edit_event: Edits an event in your calendar
@@ -113,10 +113,10 @@ class Calendar:
       self.event = event
 
       new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
-      conflict = conflicts(event_date, start_time, end_time)
+      conflict = Calendar.conflicts(self, event_date, start_time, end_time)
 
       if conflict == False:
-        
+
         self.fh = self.fh.append(new_event, ignore_index=True)
         return new_event
       else:
@@ -182,7 +182,7 @@ class Event:
     def create_event(self):
       date = idtodate(self.date_id)
       data = {'Date': [date],'Event Description':[self.event_desc],'Start Time':[self.event_start],'End Time':[self.event_end],'Date IDs':[self.date_id],'Event IDs':[self.event_id]}
-      event = pd.Dataframe(data, columns =['Date','Event Description','Start Time','End Time','Data IDs','Event IDs'])
+      event = pandas.Dataframe(data, columns =['Date','Event Description','Start Time','End Time','Data IDs','Event IDs'])
       return(event)
 
 
