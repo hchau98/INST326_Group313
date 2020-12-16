@@ -40,6 +40,7 @@ class Calendar:
         event_ids.append(counter)
         counter = counter + 1
       self.fh["Event IDs"] = event_ids
+      self.fh.set_index('Date IDs')
           
           
     def get_schedule(self,day):
@@ -128,8 +129,8 @@ def datetoid(date):
               temp[1] = "0" + temp[1]
           if len(temp[0]) == 1:
               temp[0] = "0" + temp[0]
-          date_id = temp[2]+temp[1]+temp[0]
-  return date_id
+          date_id = temp[2]+temp[0]+temp[1]
+  return int(date_id)
 
 def idtodate(date_id):  
   """id to date function"""
@@ -141,10 +142,20 @@ def idtodate(date_id):
   date = str(month + "/" + date + "/" + year)
   return date
 
-def validatedate(date_id):
-  """Takes a date id
+def validatedate(date):
+  """Takes a list of the components of a date and ensures the date is valid
+        Args:
+              date: a list containing the elements of the date
+        
+        Returns:
+              valid: A boolean that is true if the date is valid and false if not
   """
-  
+  if int(date[0]) > 12 or int(date[0]) <1:
+    return False
+  if int(date[1]) <1 or int(date[1]) > 31:
+    return False 
+  else:
+    return True
 def parse_args(arglist):
   parser = argparse.ArgumentParser()
   parser.add_argument("filename",help="csv file containing schedule")
@@ -152,4 +163,28 @@ def parse_args(arglist):
 
 if __name__ == "__main__":
   args = parse_args(sys.argv[1:])
-  print(Calendar(args.filename).get_schedule("12/13/2020"))
+  cal = Calendar(args.filename)
+  exit = False
+  while exit == False:
+    action = input("How would you like to use the calendar app today(type help for help)?")
+    if action == "help":
+      print("schedule: Schedule will give you events for a day\n" +
+            "add: Add will alow for you to add an event to you calendar\n" +
+            "edit: Edit allows for you to edit an already existing event\n" +
+            "remove: Remove will let you remove an event\n" +
+            "exit: Will exit the program"
+            )
+    if action == "schedule":
+      day = input("What day would you like to look at your schedule (MM/DD/YYYY):")
+      print(cal.get_schedule(day))
+    if action == "add":
+      day = input("What day will this event occur on (MM/DD/YYYY):")
+      desc = input("What is this event:")
+      start = input("When does the event start (HH:MM in militaryt time):")
+      end_time = input("When does the event end (HH:MM in militaryt time):")
+      cal.add_event(day,start, end_time,desc)
+      print(desc + " on " + day + " has been added to your calendar.")
+    if action == "exit":
+      exit = True
+    else:
+      print("Unknown command")
