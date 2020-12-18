@@ -123,7 +123,7 @@ class Calendar:
           self.fh.drop[index]
 
 
-    def edit_event(event_id,  date_id, event_desc, event_start, event_end):
+    def edit_event(self):
       """ 
       Edits the parameters of an event 
       Args:
@@ -139,10 +139,12 @@ class Calendar:
         edit_input = input("Enter the column in which you wnat to change.")
         while edit_input not in self.fh:
           print("Not valid input")
-          edit_input = input("Enter the column in which you wantt to change.")
+          edit_input = input("Enter the column in which you want to change.")
 
       change_input = input("What did you want to change "+edit_input+" to?")
       self.fh.loc[event_input , edit_input] = change_input
+      if edit_input == "DATE":
+          self.fh.loc[event_input,'Date IDs'] = datetoid(change_input)
       print(self.fh)
       x = input("Do you wish to continue? Enter yes to continue or anything else to stop") 
     
