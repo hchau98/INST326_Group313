@@ -71,7 +71,7 @@ class Calendar:
         new_appointment(dict): dict of new appointment
         existing_appointment(dict): dict of all appointments
       """
-      df = self.fh[self.fh["DATE"] == date]
+      df = self.fh[self.fh["DATE"] == date
 
       if len(df) == 0:
         return False
@@ -147,6 +147,11 @@ class Calendar:
           self.fh.loc[event_input,'Date IDs'] = datetoid(change_input)
       print(self.fh)
       x = input("Do you wish to continue? Enter yes to continue or anything else to stop") 
+      def recreate_csv(self,filename):
+        self.fh['DATE'].to_csv(filename,sep=',')
+        self.fh['EVENT DESCRIPTION'].to_csv(filename,sep=',')
+        self.fh['START TIME'].to_csv(filename,sep=',')
+        self.fh['END TIME'].to_csv(filename,sep=',')
     
 def datetoid(date):
   """Takes a date as a string and converts it into a date id
@@ -194,6 +199,8 @@ def validatedate(date):
     return False 
   else:
     return True
+
+  
 def parse_args(arglist):
   parser = argparse.ArgumentParser()
   parser.add_argument("filename",help="csv file containing schedule")
