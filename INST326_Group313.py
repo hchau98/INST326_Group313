@@ -124,15 +124,15 @@ class Calendar:
 
 
     def edit_event(event_id,  date_id, event_desc, event_start, event_end):
-    	""" Edits the parameters of an event 
-            Args:
-              date_id: An assigned integer to reference the event to a date on the calendar
-            	event_desc: A string that gives a description of the event
-            	event_start: A tuple to designate the start time
-           		even_end:A tuple to designate the end tim
-		  """
+      """ 
+      Edits the parameters of an event 
+      Args:
+      date_id: An assigned integer to reference the event to a date on the calendar
+      event_desc: A string that gives a description of the event
+      event_start: A tuple to designate the start time
+      even_end:A tuple to designate the end time
+      """
       print(self.fh)
-      
       x = "yes"
       while x == "yes":
         event_input = int(input("Enter the Event ID of the event in which you want edit."))
@@ -140,11 +140,11 @@ class Calendar:
         while edit_input not in self.fh:
           print("Not valid input")
           edit_input = input("Enter the column in which you wantt to change.")
-          
-        change_input = input("What did you want to change "+edit_input+" to?")
-        self.fh.loc[event_input , edit_input] = change_input
-        print(self.fh)
-        x = input("Do you wish to continue? Enter yes to continue or anything else to stop") 
+
+      change_input = input("What did you want to change "+edit_input+" to?")
+      self.fh.loc[event_input , edit_input] = change_input
+      print(self.fh)
+      x = input("Do you wish to continue? Enter yes to continue or anything else to stop") 
     
 def datetoid(date):
   """Takes a date as a string and converts it into a date id
