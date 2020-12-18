@@ -1,4 +1,5 @@
 import pandas
+import numpy as np
 import argparse
 import sys
 import re
@@ -13,7 +14,7 @@ class Calendar:
       Methods:
       		__init__: Initilizes the calander object by parsing a csv
           get_schedule(): Gives the user their schedule for the day
-          conflicts: returns a list containing conflicting scheduling appointments
+          conflicts: Returns a boolean value depending on whether a new appointment conflicts with an existing one
           add_event: Adds an event to your calendar
           remove_event: Removes an event from your calendar
           edit_event: Edits an event in your calendar
@@ -40,7 +41,6 @@ class Calendar:
         event_ids.append(counter)
         counter = counter + 1
       self.fh["Event IDs"] = event_ids
-      self.fh.set_index('Date IDs')
           
           
     def get_schedule(self,day):
@@ -63,9 +63,9 @@ class Calendar:
       return (scheds)
 
 
-    def conflicts(self):
+    def conflicts(self, date, start, end):
       """
-      Returns to the user a list of conflicting scheduling appointments
+      Returns True if a new event conflicts with an existing appointment
       
       Args:
         new_appointment(dict): dict of new appointment
@@ -90,10 +90,31 @@ class Calendar:
           else:
             return False
       
+      Returns: 
+        boolean values
       
+      """
+
+      df = self.fh[self.fh["DATE"] == date]
+
+      if len(df) == 0:
+        return False
       
+      else:
+        
+        for index, row in df.iterrows():
 
+          start_1 = tuple(start.split(":"))
+          end_1 = tuple(end.split(":"))
+          start_2 = tuple(row['START TIME'].split(":"))
+          end_2 = tuple(row['END TIME'].split(':'))
 
+          if start_1 == start_2 or start_1 < start_2 < end_1 or start_2 < start_1 < end_2:
+            return True
+          else:
+            return False
+
+      
     def add_event(self, event_date, start_time, end_time, event):
       """ Adds an event to the users schedule
       		
@@ -101,21 +122,30 @@ class Calendar:
               event_date: the day of the event to be added
               start_time: the time event starts
               end_time: the time the event ends
-              event(str): description of the event to be added 
+              event: description of the event to be added 
       """
 
+      self.event_date = event_date
+      self.start_time = start_time
+      self.end_time = end_time
+      self.event = event
 
-      #new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
+      new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
+      conflict = Calendar.conflicts(self, event_date, start_time, end_time)
 
-      #self.fh = self.fh.append([event_date, datetoid(event_date), event, start_time, end_time])
-      self.fh.loc[len(self.fh.index)] = [event_date, event, start_time, end_time, datetoid(event_date), len(self.fh.index)+1]
-      return self.fh
+      if conflict == False:
 
-    def remove_event(self):
+        self.fh = self.fh.append(new_event, ignore_index=True)
+        return new_event
+      else:
+        print("The event you are trying to add conflicts with an appointment you already have")
+
+    def remove_event(self, date, event):
       """ Removes an event from the users schedule
       		
           Args:
           	event: the event to be removed
+            date: date of event
       """
       temp = self.fh
       for index, row in temp.iterrows():
@@ -123,7 +153,8 @@ class Calendar:
           self.fh.drop[index]
 
 
-    def edit_event(event_id,  date_id, event_desc, event_start, event_end):
+
+    def edit_event(self, event_id,  date_id, event_desc, event_start, event_end):
     	""" Edits the parameters of an event 
 
             Args:
@@ -132,7 +163,48 @@ class Calendar:
             	event_start: A tuple to designate the start time
            		even_end:A tuple to designate the end tim
 		  """
+        
+
+
+
+class Event:
+    """ This class represents an event on the calendar
+
+      Attributes: 
+          event_id: an assigned integer to refernce the event
+          date_id: An assigned integer to reference the event to a date on the calendar
+          event_desc: A string that gives a description of the event
+          event_start: A tuple to designate the start time
+          even_end:A tuple to designate the end time
+
+      Methods:
+          __init__: Creates an instance of the event class with given parameters
+    """
     
+
+    def __init__(self, event_id, date_id, event_desc, event_start, event_end):
+      """Initializes the create of the event object with the given parameters
+      
+      		Args:
+          	event_id: an assigned integer to refernce the event
+          date_id: An assigned integer to reference the event to a date on the calendar
+          event_desc: A string that gives a description of the event
+          event_start: A tuple to designate the start time
+          even_end:A tuple to designate the end time
+      """
+      self.event_id = event_id
+      self.date_id = date_id
+      self.event_desc = event_desc
+      self.event_start = event_start
+      self.event_end = event_end
+    def create_event(self):
+      date = idtodate(self.date_id)
+      data = {'Date': [date],'Event Description':[self.event_desc],'Start Time':[self.event_start],'End Time':[self.event_end],'Date IDs':[self.date_id],'Event IDs':[self.event_id]}
+      event = pandas.Dataframe(data, columns =['Date','Event Description','Start Time','End Time','Data IDs','Event IDs'])
+      return(event)
+
+
+
 def datetoid(date):
   """Takes a date as a string and converts it into a date id
         
@@ -152,8 +224,8 @@ def datetoid(date):
               temp[1] = "0" + temp[1]
           if len(temp[0]) == 1:
               temp[0] = "0" + temp[0]
-          date_id = temp[2]+temp[0]+temp[1]
-  return int(date_id)
+          date_id = temp[2]+temp[1]+temp[0]
+  return date_id
 
 def idtodate(date_id):  
   """id to date function"""
@@ -164,21 +236,7 @@ def idtodate(date_id):
   month = match[2]
   date = str(month + "/" + date + "/" + year)
   return date
-
-def validatedate(date):
-  """Takes a list of the components of a date and ensures the date is valid
-        Args:
-              date: a list containing the elements of the date
-        
-        Returns:
-              valid: A boolean that is true if the date is valid and false if not
-  """
-  if int(date[0]) > 12 or int(date[0]) <1:
-    return False
-  if int(date[1]) <1 or int(date[1]) > 31:
-    return False 
-  else:
-    return True
+  
 def parse_args(arglist):
   parser = argparse.ArgumentParser()
   parser.add_argument("filename",help="csv file containing schedule")
@@ -186,6 +244,7 @@ def parse_args(arglist):
 
 if __name__ == "__main__":
   args = parse_args(sys.argv[1:])
+<<<<<<< HEAD
   cal = Calendar(args.filename)
   exit = False
   while exit == False:
@@ -215,3 +274,6 @@ if __name__ == "__main__":
       exit = True
     else:
       print("Unknown command")
+=======
+ 
+>>>>>>> f363e56839fec18785f37ed04fcd107fcaf00fbb
