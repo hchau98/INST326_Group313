@@ -145,9 +145,9 @@ class Calendar:
           edit_input = input("Enter the column in which you want to change.")
 
         change_input = input("What did you want to change "+edit_input+" to?")
-        self.fh.loc[event_input , edit_input] = change_input
+        self.fh.loc[event_input-1, edit_input] = change_input
         if edit_input == "DATE":
-            self.fh.loc[event_input,'Date IDs'] = datetoid(change_input)
+            self.fh.loc[event_input-1,'Date IDs'] = datetoid(change_input)
         print(self.fh)
         x = input("Do you wish to continue? Enter yes to continue or anything else to stop") 
     
@@ -234,5 +234,9 @@ if __name__ == "__main__":
       cal.edit_event()  
     if action == "exit":
       exit = True
+      cal = cal.fh.drop(columns=['Date IDs', 'Event IDs'])
+      print(cal)
+      cal.to_csv(args.filename, index=False)
+      
     else:
       print("Unknown command")
