@@ -71,7 +71,24 @@ class Calendar:
         new_appointment(dict): dict of new appointment
         existing_appointment(dict): dict of all appointments
       """
+      df = self.fh[self.fh["DATE"] == date]
 
+      if len(df) == 0:
+        return False
+      
+      else:
+        
+        for index, row in df.iterrows():
+
+          start_1 = tuple(start.split(":"))
+          end_1 = tuple(end.split(":"))
+          start_2 = tuple(row['START TIME'].split(":"))
+          end_2 = tuple(row['END TIME'].split(':'))
+
+          if start_1 == start_2 or start_1 < start_2 < end_1 or start_2 < start_1 < end_2:
+            return True
+          else:
+            return False
       
       
       
@@ -100,6 +117,10 @@ class Calendar:
           Args:
           	event: the event to be removed
       """
+      temp = self.fh
+      for index, row in temp.iterrows():
+        if date == row['DATE'] and event == row['EVENT']:
+          self.fh.drop[index]
 
 
     def edit_event(event_id,  date_id, event_desc, event_start, event_end):
@@ -123,6 +144,8 @@ def datetoid(date):
   """
 
   temp = date.split("/")
+  if validatedate(temp) == False:
+    print("INVALID DATE")
   date_id=''
   for i in temp:
           if len(temp[1]) == 1:
@@ -184,6 +207,10 @@ if __name__ == "__main__":
       end_time = input("When does the event end (HH:MM in militaryt time):")
       cal.add_event(day,start, end_time,desc)
       print(desc + " on " + day + " has been added to your calendar.")
+    if action == "remove":
+      id = input("Please input the event id of the event you would like to remove:")
+      cal.remove_event(id)
+      
     if action == "exit":
       exit = True
     else:
