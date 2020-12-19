@@ -1,12 +1,13 @@
 from INST326_Group313 import Calendar
 from INST326_Group313 import datetoid
-from INST326_Group313 import idtodate
-cal = datetoid("11/22/2020")
-cal_test = Calendar("SCHDULE_CSV.csv")
-print(cal_test.fh)
-cal_test.add_event("12/13/2020", "12:00", "14:00", "Party")
-print(cal_test.fh)
-cal_test.fh.set_index("Date IDs")
-print(cal_test.fh.loc[11])
-print (idtodate(19990913))
-cal_test.edit_event()
+
+
+
+
+testing_cal = Calendar("test_schedule_js.csv")
+print(testing_cal.fh)
+testing_cal.remove_event(5)
+testing_cal.add_event("12/31/2020", "20:00", "23:59", "New Years Eve Party")
+
+print(testing_cal.fh)
+answer_cal = {"DATE":[]}
