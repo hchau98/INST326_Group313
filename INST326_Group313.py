@@ -108,7 +108,7 @@ class Calendar:
       #new_event = pandas.DataFrame({"DATE": self.event_date, "EVENT DESCRIPTION": self.event, "START TIME": self.start_time, " END TIME": self.end_time})
 
       #self.fh = self.fh.append([event_date, datetoid(event_date), event, start_time, end_time])
-      self.fh.loc[len(self.fh.index)] = [event_date, event, start_time, end_time, datetoid(event_date), len(self.fh.index)+1]
+      self.fh.loc[self.fh.index.values.max()+1] = [event_date, event, start_time, end_time, datetoid(event_date), self.fh["Event IDs"].max()+1]
       return self.fh
 
     def remove_event(self,id):
