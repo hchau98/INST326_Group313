@@ -63,7 +63,7 @@ class Calendar:
       return (scheds)
 
 
-    def conflicts(self):
+    def conflicts(self,date):
       """
       Returns to the user a list of conflicting scheduling appointments
       
@@ -71,8 +71,8 @@ class Calendar:
         new_appointment(dict): dict of new appointment
         existing_appointment(dict): dict of all appointments
       """
-      df = self.fh[self.fh["DATE"] == date]
-
+      df = self.fh[self.fh["Date IDs"] == datetoid(date)]
+      print(df)
       if len(df) == 0:
         return False
       
@@ -80,10 +80,14 @@ class Calendar:
         
         for index, row in df.iterrows():
 
-          start_1 = tuple(start.split(":"))
-          end_1 = tuple(end.split(":"))
+          start_1 = tuple(row['START TIME'][index].split(":"))
+          print(start_1)
+          end_1 = tuple(row['END TIME'].split(":"))
+          print(end_1)
           start_2 = tuple(row['START TIME'].split(":"))
+          print(start_2)
           end_2 = tuple(row['END TIME'].split(':'))
+          print(end_2)
 
           if start_1 == start_2 or start_1 < start_2 < end_1 or start_2 < start_1 < end_2:
             return True
