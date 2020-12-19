@@ -40,7 +40,7 @@ class Calendar:
         event_ids.append(counter)
         counter = counter + 1
       self.fh["Event IDs"] = event_ids
-      self.fh.set_index('Date IDs')
+      self.fh.set_index(['Event IDs'])
           
           
     def get_schedule(self,day):
@@ -111,17 +111,19 @@ class Calendar:
       self.fh.loc[len(self.fh.index)] = [event_date, event, start_time, end_time, datetoid(event_date), len(self.fh.index)+1]
       return self.fh
 
-    def remove_event(self):
+    def remove_event(self,id):
       """ Removes an event from the users schedule
       		
           Args:
           	event: the event to be removed
       """
-      temp = self.fh
-      for index, row in temp.iterrows():
-        if date == row['DATE'] and event == row['EVENT']:
-          self.fh.drop[index]
-
+      #temp = self.fh
+      #for index, row in temp.iterrows():
+        #if id == row['Event IDS']:
+          #self.fh.drop[index]
+      indexes = self.fh[ self.fh['Event IDs'] == id].index
+      print(indexes)
+      self.fh = self.fh.drop(indexes)
 
     def edit_event(self):
       """ 
@@ -133,10 +135,11 @@ class Calendar:
       even_end:A tuple to designate the end time
       """
       print(self.fh)
+      
       x = "yes"
       while x == "yes":
         event_input = int(input("Enter the Event ID of the event in which you want edit."))
-        edit_input = input("Enter the column in which you wnat to change.")
+        edit_input = input("Enter the column in which you want to change.")
         while edit_input not in self.fh:
           print("Not valid input")
           edit_input = input("Enter the column in which you want to change.")
@@ -230,10 +233,17 @@ if __name__ == "__main__":
       cal.add_event(day,start, end_time,desc)
       print(desc + " on " + day + " has been added to your calendar.")
     if action == "remove":
-      id = input("Please input the event id of the event you would like to remove:")
+      print(cal.fh)
+      id = int(input("Please input the event id of the event you would like to remove:"))
       cal.remove_event(id)
-      
+      print(cal.fh)
+    if action == "edit":
+      cal.edit_event()  
     if action == "exit":
       exit = True
+      cal = cal.fh.drop(columns=['Date IDs', 'Event IDs'])
+      print(cal)
+      cal.to_csv(args.filename, index=False)
+      
     else:
       print("Unknown command")
